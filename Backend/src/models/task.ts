@@ -8,18 +8,41 @@ export interface Itask extends Document {
   userId: Types.ObjectId;
 }
 
-const taskSchema = new Schema<Itask>({
-  title: {
-    type: String,
-    required: true,
-    minLength: 2,
-    maxLength: 60,
-    trim: true,
-  },
+const taskSchema = new Schema<Itask>(
+  {
+    title: {
+      type: String,
+      required: true,
+      minLength: 2,
+      maxLength: 60,
+      trim: true,
+    },
 
-  description: {
-    type: String,
-    trim: true,
-    default: "",
+    description: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+
+    status: {
+      type: String,
+      enum: ["Pending", "Completed"],
+      default: "Pending",
+    },
+
+    createdAt: {
+      type: Date,
+    },
+
+    userId: {
+      type: Types.ObjectId,
+      ref: "user",
+      required: true,
+    },
   },
-});
+  {
+    timestamps: true,
+  },
+);
+
+export default mongoose.model<Itask>("Task", taskSchema);
