@@ -5,7 +5,9 @@ const app = express();
 app.use(express.json());
 
 import authRouter from "./routes/auth.route";
+import taskRouter from "./routes/task.route";
 
-app.use("/todo", authRouter);
+app.use("/task", authRouter);
+app.use("/task", taskRouter);
 
 export { app };

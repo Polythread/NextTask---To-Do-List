@@ -5,7 +5,7 @@ export interface Itask extends Document {
   description: string;
   status: "Pending" | "Completed";
   createdAt: Date;
-  userId: Types.ObjectId;
+  userId: Schema.Types.ObjectId;
 }
 
 const taskSchema = new Schema<Itask>(
@@ -35,7 +35,7 @@ const taskSchema = new Schema<Itask>(
     },
 
     userId: {
-      type: Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "user",
       required: true,
     },
