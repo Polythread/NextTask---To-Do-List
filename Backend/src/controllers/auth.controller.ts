@@ -21,7 +21,9 @@ export const handleRegister = async (req: Request, res: Response) => {
       password: hashedPassword,
     });
 
-    return res.status(201).send({ message: "User Created!", User });
+    const result = await user.findOne({ email }).select("");
+
+    return res.status(201).send({ message: "User Created!", result });
   } catch (error) {
     console.error(error);
   }
@@ -31,12 +33,12 @@ export const handleLogin = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
 
-    const emailExist = await user.findOne({ email });
+    const emailExist = await user.findOne({ email }).select("+password");
     if (!emailExist) {
       return res.status(400).send("Incorrect Credentials");
     }
 
-    const validPass = bcrypt.compare(password, emailExist.password);
+    const validPass = await bcrypt.compare(password, emailExist.password);
     if (!validPass) {
       return res.status(400).send("Incorrect Credentials");
     }

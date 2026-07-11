@@ -34,3 +34,57 @@ export const getTasks = async (req: Request, res: Response) => {
     console.error(error);
   }
 };
+
+export const updateTask = async (req: Request, res: Response) => {
+  try {
+    const userId = req.userId;
+    const taskId = req.params.taskId;
+
+    const { title, description, status } = req.body;
+
+    const updatedTask = await task.findOneAndUpdate(
+      {
+        _id: taskId,
+        userId,
+      },
+      {
+        title,
+        description,
+        status,
+      },
+      {
+        new: true,
+      },
+    );
+
+    if (!updatedTask) {
+      return res.status(400).send("Task Not Found!");
+    }
+
+    return res.status(200).send({ message: "Task Updated!", updatedTask });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const deleteTask = async (req: Request, res: Response) => {
+  try {
+    const userId = req.userId;
+    const taskId = req.params.taskId;
+
+    const deletingTask = await task.findOneAndDelete({
+      _id: taskId,
+      userId,
+    });
+
+    if (!deletingTask) {
+      return res.status(400).send("Task Not Found!");
+    }
+
+    return res.status(200).send({
+      message: "Task deleted successfully!",
+    });
+  } catch (error) {
+    console.error(error);
+  }
+};
